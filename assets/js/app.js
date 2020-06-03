@@ -187,8 +187,8 @@ d3.csv("assets/data/censusData.csv").then(function(censusData, err) {
 		.append("circle")
 		.attr("cx", d => xLinearScale(d[chosenXAxis]))
 		.attr("cy", d => yLinearScale(d[chosenYAxis]))
-		.attr("r", 20)
-		.attr("fill", "red")
+		.attr("r", 10)
+		.attr("fill", "green")
 		.attr("opacity", ".5");
 		
 	//create group for 3 x-axis labels
@@ -220,7 +220,7 @@ d3.csv("assets/data/censusData.csv").then(function(censusData, err) {
 	//	.attr("transform", "rotate(-90)");
 	
 	var healthcareLabel = labelsGroup.append("text")
-	.attr("transform", "rotate(-90)")
+		.attr("transform", "rotate(-90)")
 		.attr("x", height/2+margin.top)
 		.attr("y", 50 - (width/2)-margin.left)
 		.attr("dy", "1em")
@@ -255,6 +255,7 @@ d3.csv("assets/data/censusData.csv").then(function(censusData, err) {
 			//get value of selection
 			var value = d3.select(this).attr("value");
 			//if (value !== chosenXAxis) {
+			console.log(value)
 			if (value === "poverty" || value === "age" || value ==="income") {
 				//replace chosenXAxis with value
 				chosenXAxis = value;
@@ -262,7 +263,7 @@ d3.csv("assets/data/censusData.csv").then(function(censusData, err) {
 				console.log(censusData);
 				console.log(chosenXAxis);
 				console.log(censusData["state"])
-		.		
+				
 				//functions here found abov csv import
 				//updates x scale for new data
 				xLinearScale = xScale(censusData, chosenXAxis);
@@ -270,8 +271,11 @@ d3.csv("assets/data/censusData.csv").then(function(censusData, err) {
 				//updates x axis with transition
 				xAxis = renderXAxes(xLinearScale, xAxis);
 				
+				// updates circles with new x values
+				circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+		
 				//updates circles with new x values
-				//circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+				circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 				
 				//changes classes to change bold text
 				if (chosenXAxis === "poverty") {
