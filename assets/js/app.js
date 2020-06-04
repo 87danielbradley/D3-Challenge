@@ -141,11 +141,18 @@ function updateToolTip(chosenXAxis, circlesGroup, chosenYAxis) {
 	circlesGroup.call(toolTip);
 	
 	circlesGroup.on("mouseover", function(data) {
-		
+		d3.select(this).style("stroke","black")
+		.attr("opacity", .5)
+		.style("fill", "blue")
+		.attr('r', 30);
 		toolTip.show(data);
 	})
 		// onmouseout event
 		.on("mouseout", function(data, index) {
+			d3.select(this).style("stroke","red")
+			.attr("opacity", 0.5)
+			.style("fill", "red")
+			.attr('r', 15);
 			toolTip.hide(data);
 		});
 	return circlesGroup;
@@ -209,7 +216,7 @@ d3.csv("assets/data/censusData.csv").then(function(censusData, err) {
 		.attr("cy", d => yLinearScale(d[chosenYAxis]))
 		.attr("r", 15)
 		.attr("fill", "red")
-		.attr("opacity", ".25");
+		.attr("opacity", ".5");
 		
 	//append initial states
 	var textGroup = chartGroup.selectAll()
