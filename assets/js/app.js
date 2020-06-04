@@ -35,8 +35,8 @@ function xScale (censusData,chosenXAxis) {
 	
 	//create scales
 	var xLinearScale = d3.scaleLinear()
-		.domain([d3.min(censusData, d=>d[chosenXAxis])*0.8,
-		  d3.max(censusData, d=>d[chosenXAxis])*1.2
+		.domain([d3.min(censusData, d=>d[chosenXAxis])*0.95,
+		  d3.max(censusData, d=>d[chosenXAxis])*1
 		])
 		.range([0,width]); 
 		
@@ -52,7 +52,7 @@ function yScale (censusData, chosenYAxis) {
 	console.log(chosenYAxis)
 	var yLinearScale = d3.scaleLinear()
 		.domain([d3.min(censusData, d=> d[chosenYAxis]) *0.8,
-		  d3.max(censusData, d => d[chosenYAxis]) *1.2
+		  d3.max(censusData, d => d[chosenYAxis]) *1
 		])
 		.range([height, 0]);  
 		console.log(d3.min(censusData, d=> d[chosenYAxis]));
@@ -204,11 +204,11 @@ d3.csv("assets/data/censusData.csv").then(function(censusData, err) {
 		.attr("opacity", ".75");
 		
 	//append initial states
-	var textGroup = chartGroup.selectAll("text")
+	var textGroup = chartGroup.selectAll()
 		.data(censusData)
 		.enter()
 		.append("text")
-		.text(d=>d.abbr)
+		.text(d=>{console.log(d.abbr); return d.abbr})
 		.attr("x", d => xLinearScale(d[chosenXAxis]))
 		.attr("y", d => yLinearScale(d[chosenYAxis]))
 		.style("text-anchor", "middle")
