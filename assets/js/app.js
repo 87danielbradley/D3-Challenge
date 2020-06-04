@@ -1,12 +1,18 @@
 //Setting up chart
-var svgWidth = 960;
-var svgHeight = 500;
+function makeResponsive() {
+var svgArea = d3.select("#scatter").select("svg");
+
+if (!svgArea.empty()) {
+	svgArea.remove();
+}
+var svgWidth = window.innerWidth*0.9;
+var svgHeight = window.innerHeight*0.9;
 
 var margin = {
-	top: 20,
-	right: 40,
-	bottom: 80,
-	left: 100
+	top: window.innerHeight*0.1,
+	right: window.innerHeight*0.2,
+	bottom: window.innerHeight*0.2,
+	left: window.innerHeight*0.2
 };
 
 var width = svgWidth - margin.left - margin.right;
@@ -21,6 +27,7 @@ var svg = d3
 	.append("svg")
 	.attr("width", svgWidth)
 	.attr("height", svgHeight);
+
 			
 //Append SVG group
 var chartGroup = svg.append("g")
@@ -134,6 +141,7 @@ function updateToolTip(chosenXAxis, circlesGroup, chosenYAxis) {
 	circlesGroup.call(toolTip);
 	
 	circlesGroup.on("mouseover", function(data) {
+		
 		toolTip.show(data);
 	})
 		// onmouseout event
@@ -201,7 +209,7 @@ d3.csv("assets/data/censusData.csv").then(function(censusData, err) {
 		.attr("cy", d => yLinearScale(d[chosenYAxis]))
 		.attr("r", 15)
 		.attr("fill", "red")
-		.attr("opacity", ".75");
+		.attr("opacity", ".25");
 		
 	//append initial states
 	var textGroup = chartGroup.selectAll()
@@ -420,4 +428,8 @@ d3.csv("assets/data/censusData.csv").then(function(censusData, err) {
 	console.log(error);
 });
 	
-	
+}
+
+makeResponsive();
+
+d3.select(window).on("resize", makeResponsive);
