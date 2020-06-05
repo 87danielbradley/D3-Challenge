@@ -137,7 +137,7 @@ function updateToolTip(chosenXAxis, circlesGroup, chosenYAxis) {
 		.html(function(d) {
 			return (`${d.state}<hr>${yLabel}${d[chosenYAxis]}<br>${xLabel} ${d[chosenXAxis]}`);
 		});
-	
+	console.log("circle flag", circlesGroup);
 	circlesGroup.call(toolTip);
 	
 	circlesGroup.on("mouseover", function(data) {
@@ -313,7 +313,7 @@ d3.csv("assets/data/censusData.csv").then(function(censusData, err) {
 				circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 				textGroup = renderText(textGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis)
 				//updates circles with new x values
-				//circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+				circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 				
 				//changes classes to change bold text
 				console.log('x axis flag');
@@ -366,7 +366,7 @@ d3.csv("assets/data/censusData.csv").then(function(censusData, err) {
 				yAxis = renderYAxes(yLinearScale, yAxis);
 				
 				//updates circles with new x values
-				//circlesGroup = updateToolTip(chosenYAxis, circlesGroup);
+				circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 				
 				//changes classes to change bold text
 				console.log('y axis flag')
