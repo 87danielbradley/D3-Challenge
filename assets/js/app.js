@@ -55,16 +55,13 @@ function xScale (censusData,chosenXAxis) {
 
 function yScale (censusData, chosenYAxis) {
 	//create scales
-	console.log(censusData)
-	console.log(chosenYAxis)
+	
 	var yLinearScale = d3.scaleLinear()
 		.domain([d3.min(censusData, d=> d[chosenYAxis]) *0.8,
 		  d3.max(censusData, d => d[chosenYAxis]) *1.1
 		])
 		.range([height, 0]);  
-		console.log(d3.min(censusData, d=> d[chosenYAxis]));
-		console.log(d3.max(censusData, d => d[chosenYAxis]));
-		console.log(yLinearScale);
+		
 	return yLinearScale;
 }
 
@@ -88,7 +85,7 @@ function renderYAxes(newYScale, yAxis) {
 }
 
 function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYAxis) {
-
+		
 		circlesGroup.transition()
 			.duration(1000)
 			.attr("cx", d => newXScale(d[chosenXAxis]))
@@ -137,7 +134,7 @@ function updateToolTip(chosenXAxis, circlesGroup, chosenYAxis) {
 		.html(function(d) {
 			return (`${d.state}<hr>${yLabel}${d[chosenYAxis]}<br>${xLabel} ${d[chosenXAxis]}`);
 		});
-	console.log("circle flag", circlesGroup);
+	
 	circlesGroup.call(toolTip);
 	
 	circlesGroup.on("mouseover", function(data) {
@@ -155,6 +152,7 @@ function updateToolTip(chosenXAxis, circlesGroup, chosenYAxis) {
 			.attr('r', 15);
 			toolTip.hide(data);
 		});
+
 	return circlesGroup;
 }
 
@@ -184,7 +182,7 @@ d3.csv("assets/data/censusData.csv").then(function(censusData, err) {
 	data.smokesHigh = +data.smokesHigh;
 	
 	});
-	console.log(censusData)
+	
 	
 	
 	//xLinearScale function above csv import
@@ -223,7 +221,7 @@ d3.csv("assets/data/censusData.csv").then(function(censusData, err) {
 		.data(censusData)
 		.enter()
 		.append("text")
-		.text(d=>{console.log(d.abbr); return d.abbr})
+		.text(d=> d.abbr)
 		.attr("x", d => xLinearScale(d[chosenXAxis]))
 		.attr("y", d => yLinearScale(d[chosenYAxis]))
 		.style("text-anchor", "middle")
@@ -286,21 +284,19 @@ d3.csv("assets/data/censusData.csv").then(function(censusData, err) {
 	/////////////////////////////////////
 	
 	var circlesGroup = updateToolTip(chosenXAxis, circlesGroup, chosenYAxis);
-	
+	 
 	//x axis labels event listener
 	labelsGroup.selectAll("text")
 		.on("click", function() {
 			//get value of selection
 			var value = d3.select(this).attr("value");
 			//if (value !== chosenXAxis) {
-			console.log(value)
+			
 			if (value == "poverty" || value == "age" || value =="income") {
 				//replace chosenXAxis with value
 				chosenXAxis = value;
 				
-				console.log(censusData);
-				console.log(chosenXAxis);
-				console.log(censusData["state"])
+				
 				
 				//functions here found abov csv import
 				//updates x scale for new data
@@ -311,14 +307,17 @@ d3.csv("assets/data/censusData.csv").then(function(censusData, err) {
 				
 				// updates circles with new x values
 				circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+				
+				
 				textGroup = renderText(textGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis)
 				//updates circles with new x values
-				circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 				
+				circlesGroup = updateToolTip(chosenXAxis, circlesGroup, chosenYAxis);
+				 
 				//changes classes to change bold text
-				console.log('x axis flag');
+				
 				if (chosenXAxis === "poverty") {
-					console.log('poverty flag');
+					
 					povertyLabel
 						.classed("active", true)
 						.classed("inactive", false);
@@ -329,7 +328,7 @@ d3.csv("assets/data/censusData.csv").then(function(censusData, err) {
 						.classed("active", false)
 						.classed("inactive", true);
 				} else if (chosenXAxis === "age") {
-					console.log('age flag')
+					
 					povertyLabel
 						.classed("active", false)
 						.classed("inactive", true);
@@ -340,7 +339,7 @@ d3.csv("assets/data/censusData.csv").then(function(censusData, err) {
 						.classed("active", false)
 						.classed("inactive", true);
 				} else {
-					console.log('x axis else flag');
+					
 					povertyLabel
 						.classed("active", false)
 						.classed("inactive",true);
@@ -355,23 +354,23 @@ d3.csv("assets/data/censusData.csv").then(function(censusData, err) {
 				//replace chosenXAxis with value
 				chosenYAxis = value;
 				
-				console.log(censusData[10].smokes, "306")
+				
 				
 				//functions here found abov csv import
 				//updates x scale for new data
-				console.log("yScale flag", chosenYAxis, censusData);
+				
 				yLinearScale = yScale(censusData, chosenYAxis);
 				
 				//updates x axis with transition
 				yAxis = renderYAxes(yLinearScale, yAxis);
 				
 				//updates circles with new x values
-				circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+				circlesGroup = updateToolTip(chosenXAxis, circlesGroup, chosenYAxis);
 				
 				//changes classes to change bold text
-				console.log('y axis flag')
+				
 				if (chosenYAxis === "healthcare") {
-					console.log('healthcare flag');
+					
 					healthcareLabel
 						.classed("active", true)
 						.classed("inactive", false);
@@ -382,7 +381,7 @@ d3.csv("assets/data/censusData.csv").then(function(censusData, err) {
 						.classed("active", false)
 						.classed("inactive", true);
 				} else if (chosenYAxis === "smokes") {
-					console.log('smokes flag');
+					
 					healthcareLabel
 						.classed("active", false)
 						.classed("inactive",true);
@@ -393,7 +392,7 @@ d3.csv("assets/data/censusData.csv").then(function(censusData, err) {
 						.classed("active", false)
 						.classed("inactive", true);
 				} else {
-					console.log('y axis else flag');
+					
 					healthcareLabel
 						.classed("active", false)
 						.classed("inactive",true);
@@ -407,13 +406,14 @@ d3.csv("assets/data/censusData.csv").then(function(censusData, err) {
 				
 				
 				circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+				
 				textGroup = renderText(textGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis)
 
 
-				circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+				circlesGroup = updateToolTip(chosenXAxis, circlesGroup, chosenYAxis);
                    
 				
-			} else { console.log("flag  359 not picked up")};
+			} else { console.log("Input not found")};
 			
 			
 			
